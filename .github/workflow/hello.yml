@@ -8,7 +8,8 @@ jobs:
   say-hello: 
     runs-on: ubuntu-latest
     steps: 
-      name: Checkout the Code
-      run:  actions/checkout@v3
-      name: Print Hello
-      run:  echo "Hello Github Actions"
+      - name: Checkout the Code
+        uses: actions/checkout@v3
+
+      - name: Print Hello
+        run: echo "Hello Github Actions!"

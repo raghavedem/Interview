@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Stack Cheat Sheet — 5YE</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0; --surface: #fff; --surface2: #f8f8f6;
+    --border: #e0ded8; --text: #1a1a18; --muted: #6b6b66;
+    --accent: #1a6fb5; --accent-bg: #e8f1fa;
+    --success: #2a7a3b; --success-bg: #e8f5ec;
+    --warn: #8a5a00; --warn-bg: #fdf3e0;
+    --danger: #b52a2a; --danger-bg: #fde8e8;
+    --pro: #5c3db5; --pro-bg: #eeebfa;
+    --mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18; --surface: #252523; --surface2: #1e1e1c;
+      --border: #333330; --text: #e8e8e4; --muted: #888882;
+      --accent: #5aa3e8; --accent-bg: #0e2a45;
+      --success: #5ab86c; --success-bg: #0e2e16;
+      --warn: #d4a340; --warn-bg: #2e2000;
+      --danger: #e87070; --danger-bg: #2e0e0e;
+      --pro: #a884e8; --pro-bg: #1e1040;
+    }
+  }
+  body { background: var(--bg); font-family: var(--sans); color: var(--text); padding: 16px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+  .full { grid-column: 1 / -1; }
+  .two { grid-column: span 2; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .head { padding: 7px 12px; font-size: 11px; font-weight: 600; letter-spacing: .04em; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--border); }
+  .body { padding: 10px 12px 12px; }
+  .sec { font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin: 8px 0 3px; }
+  .sec:first-child { margin-top: 0; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 2.5px 0; border-bottom: 1px solid var(--border); font-size: 11.5px; }
+  .row:last-child { border-bottom: none; }
+  .lbl { color: var(--muted); flex-shrink: 0; }
+  .val { text-align: right; }
+  code, .mono { font-family: var(--mono); font-size: 10.5px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; color: var(--accent); }
+  pre { font-family: var(--mono); font-size: 10.5px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; line-height: 1.65; overflow-x: auto; white-space: pre; color: var(--text); margin: 4px 0; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; }
+  .js  { background: #fef3c7; color: #92400e; }
+  .rc  { background: #dbeafe; color: #1e40af; }
+  .py  { background: #dcfce7; color: #166534; }
+  .pg  { background: #ede9fe; color: #5b21b6; }
+  .rd  { background: #fee2e2; color: #991b1b; }
+  .gr  { background: var(--surface2); color: var(--muted); }
+  @media (prefers-color-scheme: dark) {
+    .js  { background: #451a03; color: #fbbf24; }
+    .rc  { background: #0f2458; color: #93c5fd; }
+    .py  { background: #052e12; color: #86efac; }
+    .pg  { background: #1e0a4a; color: #c4b5fd; }
+    .rd  { background: #450a0a; color: #fca5a5; }
+  }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .five-col { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0 12px; }
+</style>
+</head>
+<body>
+<h1>⚡ Full Stack Cheat Sheet</h1>
+<p class="subtitle">React · JavaScript · FastAPI · PostgreSQL · Redis · Architecture — 5-Year Experience</p>
+
+<div class="grid">
+
+<!-- JS CORE -->
+<div class="card">
+  <div class="head"><span class="tag js">JS</span> Core concepts</div>
+  <div class="body">
+    <div class="sec">event loop order</div>
+    <pre>sync → microtasks → macrotasks
+Promise.then / queueMicrotask → micro
+setTimeout / setInterval → macro</pre>
+    <div class="sec">this binding</div>
+    <div class="row"><span class="lbl">method call</span><span class="val"><code>obj.fn()</code> → obj</span></div>
+    <div class="row"><span class="lbl">arrow fn</span><span class="val">lexical (no own this)</span></div>
+    <div class="row"><span class="lbl">explicit</span><span class="val"><code>.call(ctx)</code> <code>.bind(ctx)</code></span></div>
+    <div class="row"><span class="lbl">new</span><span class="val">fresh empty object</span></div>
+    <div class="sec">type coercion traps</div>
+    <div class="row"><span class="lbl"><code>typeof null</code></span><span class="val">'object' ← bug</span></div>
+    <div class="row"><span class="lbl"><code>[] == false</code></span><span class="val">true (coercion)</span></div>
+    <div class="row"><span class="lbl"><code>null == undefined</code></span><span class="val">true (special rule)</span></div>
+    <div class="sec">falsy values</div>
+    <pre>false · 0 · '' · null · undefined · NaN · 0n
+[] and {} are TRUTHY</pre>
+  </div>
+</div>
+
+<!-- JS ASYNC -->
+<div class="card">
+  <div class="head"><span class="tag js">JS</span> Async patterns</div>
+  <div class="body">
+    <div class="sec">promise combinators</div>
+    <div class="row"><span class="lbl"><code>Promise.all</code></span><span class="val">all resolve or fast-fail</span></div>
+    <div class="row"><span class="lbl"><code>Promise.allSettled</code></span><span class="val">all finish, report each</span></div>
+    <div class="row"><span class="lbl"><code>Promise.race</code></span><span class="val">first settle wins</span></div>
+    <div class="row"><span class="lbl"><code>Promise.any</code></span><span class="val">first resolve (ignores rejects)</span></div>
+    <div class="sec">parallel vs sequential</div>
+    <pre>// ❌ sequential — 200ms
+const u = await fetchUser();
+const p = await fetchPosts();
+
+// ✅ parallel — ~100ms
+const [u,p] = await Promise.all([
+  fetchUser(), fetchPosts()
+]);</pre>
+    <div class="sec">stale closure fix</div>
+    <pre>// ❌ stale: count captured at 0
+setCount(count + 1);
+
+// ✅ functional update — always fresh
+setCount(prev => prev + 1);</pre>
+  </div>
+</div>
+
+<!-- JS ARRAY -->
+<div class="card">
+  <div class="head"><span class="tag js">JS</span> Array &amp; object methods</div>
+  <div class="body">
+    <div class="sec">non-mutating (return new)</div>
+    <div class="row"><span class="lbl"><code>map</code></span><span class="val">transform each element</span></div>
+    <div class="row"><span class="lbl"><code>filter</code></span><span class="val">subset by predicate</span></div>
+    <div class="row"><span class="lbl"><code>reduce</code></span><span class="val">accumulate to value</span></div>
+    <div class="row"><span class="lbl"><code>slice / concat</code></span><span class="val">copy portions</span></div>
+    <div class="row"><span class="lbl"><code>flat / flatMap</code></span><span class="val">unnest arrays</span></div>
+    <div class="sec">mutating — clone first!</div>
+    <pre>[...arr].sort((a,b) => a - b)  // asc
+[...arr].reverse()</pre>
+    <div class="sec">object utilities</div>
+    <pre>Object.keys(o)    // ['a','b']
+Object.values(o)  // [1,2]
+Object.entries(o) // [['a',1],…]
+Object.fromEntries(entries)
+structuredClone(obj) // true deep clone</pre>
+    <div class="sec">safe access</div>
+    <pre>user?.address?.city ?? 'Unknown'
+config.port ?? 3000  // only null/undef</pre>
+  </div>
+</div>
+
+<!-- REACT HOOKS -->
+<div class="card">
+  <div class="head"><span class="tag rc">React</span> Hooks reference</div>
+  <div class="body">
+    <div class="sec">useState</div>
+    <pre>// lazy init — expensive calc once
+useState(() => JSON.parse(storage…))
+// always use functional update form
+setCount(prev => prev + 1)</pre>
+    <div class="sec">useEffect deps</div>
+    <div class="row"><span class="lbl"><code>[]</code></span><span class="val">mount only (componentDidMount)</span></div>
+    <div class="row"><span class="lbl"><code>[val]</code></span><span class="val">runs when val changes</span></div>
+    <div class="row"><span class="lbl">no array</span><span class="val">every render</span></div>
+    <div class="row"><span class="lbl">return fn</span><span class="val">cleanup on unmount / re-run</span></div>
+    <div class="sec">hook decision guide</div>
+    <div class="row"><span class="lbl"><code>useState</code></span><span class="val">simple independent values</span></div>
+    <div class="row"><span class="lbl"><code>useReducer</code></span><span class="val">complex / related state</span></div>
+    <div class="row"><span class="lbl"><code>useMemo</code></span><span class="val">expensive computation result</span></div>
+    <div class="row"><span class="lbl"><code>useCallback</code></span><span class="val">stable fn for memo children</span></div>
+    <div class="row"><span class="lbl"><code>useRef</code></span><span class="val">DOM / mutable no-rerender value</span></div>
+    <div class="row"><span class="lbl"><code>useContext</code></span><span class="val">consume shared global value</span></div>
+  </div>
+</div>
+
+<!-- REACT PERF -->
+<div class="card">
+  <div class="head"><span class="tag rc">React</span> Performance</div>
+  <div class="body">
+    <div class="sec">memoization</div>
+    <pre>// skip re-render if props unchanged
+const Child = React.memo(Comp, cmpFn?)
+
+// stable fn reference for memo children
+const del = useCallback((id) => {
+  setItems(p => p.filter(i => i.id !== id))
+}, []) // ok — functional update</pre>
+    <div class="sec">avoid inline objects in JSX</div>
+    <pre>// ❌ new object every render
+&lt;Comp style={{color:'red'}} /&gt;
+
+// ✅ stable reference
+const STYLE = {color:'red'}
+&lt;Comp style={STYLE} /&gt;</pre>
+    <div class="sec">code split + lazy</div>
+    <pre>const Chart = React.lazy(()=>import('./Chart'))
+&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+  &lt;Chart /&gt;
+&lt;/Suspense&gt;</pre>
+    <div class="row"><span class="lbl">keys rule</span><span class="val">stable unique ID — never index</span></div>
+    <div class="row"><span class="lbl">long lists</span><span class="val">virtualise with react-window</span></div>
+  </div>
+</div>
+
+<!-- REACT PATTERNS -->
+<div class="card">
+  <div class="head"><span class="tag rc">React</span> Patterns</div>
+  <div class="body">
+    <div class="sec">compound component</div>
+    <pre>&lt;Tabs defaultTab="a"&gt;
+  &lt;Tabs.List&gt;
+    &lt;Tabs.Tab value="a"&gt;A&lt;/Tabs.Tab&gt;
+  &lt;/Tabs.List&gt;
+  &lt;Tabs.Panel value="a"&gt;…&lt;/Tabs.Panel&gt;
+&lt;/Tabs&gt;</pre>
+    <div class="sec">HOC</div>
+    <pre>const withAuth = (Comp) => (props) => {
+  const {user} = useAuth()
+  if (!user) return &lt;Navigate to="/login" /&gt;
+  return &lt;Comp {...props} user={user} /&gt;
+}</pre>
+    <div class="sec">controlled vs uncontrolled</div>
+    <div class="row"><span class="lbl">controlled</span><span class="val">value + onChange managed by React</span></div>
+    <div class="row"><span class="lbl">uncontrolled</span><span class="val">DOM owns state via ref</span></div>
+    <div class="sec">error boundary</div>
+    <pre>class EB extends React.Component {
+  state = {hasError: false}
+  static getDerivedStateFromError(e) {
+    return {hasError: true}
+  }
+  componentDidCatch(e, info) {log(e)}
+  render() {
+    return this.state.hasError
+      ? &lt;Fallback /&gt; : this.props.children
+  }
+}</pre>
+  </div>
+</div>
+
+<!-- FASTAPI -->
+<div class="card">
+  <div class="head"><span class="tag py">FastAPI</span> Essentials</div>
+  <div class="body">
+    <div class="sec">dependency injection</div>
+    <pre>async def get_db():
+    async with Session() as s:
+        yield s        # cleanup after req
+
+async def get_user(
+    token = Depends(oauth2_scheme),
+    db    = Depends(get_db)):
+    payload = jwt.decode(token, SECRET)
+    return await db.get(User, payload["sub"])</pre>
+    <div class="sec">route options</div>
+    <div class="row"><span class="lbl"><code>response_model</code></span><span class="val">serialise output + OpenAPI docs</span></div>
+    <div class="row"><span class="lbl"><code>status_code</code></span><span class="val">201 for POST, 204 for DELETE</span></div>
+    <div class="row"><span class="lbl"><code>async def</code></span><span class="val">non-blocking I/O</span></div>
+    <div class="row"><span class="lbl"><code>def</code></span><span class="val">runs in threadpool</span></div>
+    <div class="sec">pydantic v2</div>
+    <pre>class User(BaseModel):
+  name:  str      = Field(min_length=2)
+  email: EmailStr
+  age:   int      = Field(ge=0, le=150)
+  role:  str      = Field(pattern="^(admin|user)$")
+
+  @field_validator('name')
+  def clean(cls, v): return v.strip()</pre>
+  </div>
+</div>
+
+<!-- JWT AUTH -->
+<div class="card">
+  <div class="head"><span class="tag py">FastAPI</span> Auth &amp; JWT</div>
+  <div class="body">
+    <div class="sec">token anatomy</div>
+    <pre>header.payload.signature
+payload: {sub, exp, iat, type}
+access_token:  15 min TTL
+refresh_token: 7  days TTL</pre>
+    <div class="sec">auth flow</div>
+    <pre>POST /auth/login   → {access, refresh}
+Authorization: Bearer &lt;access_token&gt;
+POST /auth/refresh → new access token</pre>
+    <div class="sec">common 401 causes</div>
+    <div class="row"><span class="lbl">expired</span><span class="val">exp &lt; now</span></div>
+    <div class="row"><span class="lbl">wrong secret</span><span class="val">signature mismatch</span></div>
+    <div class="row"><span class="lbl">wrong type</span><span class="val">refresh used as access</span></div>
+    <div class="sec">role guard pattern</div>
+    <pre>def require_role(role: str):
+    def check(u = Depends(get_user)):
+        if u.role != role:
+            raise HTTPException(403)
+        return u
+    return check
+
+@app.delete("/resource")
+async def delete(
+    _ = Depends(require_role("admin"))): …</pre>
+  </div>
+</div>
+
+<!-- FASTAPI ERRORS -->
+<div class="card">
+  <div class="head"><span class="tag py">FastAPI</span> Errors &amp; middleware</div>
+  <div class="body">
+    <div class="sec">global handler</div>
+    <pre>@app.exception_handler(BusinessError)
+async def handle(request, exc):
+    return JSONResponse(
+        exc.status_code,
+        {"error": exc.code,
+         "message": exc.message})</pre>
+    <div class="sec">validation error shape</div>
+    <pre>{"error": "VALIDATION_ERROR",
+ "details": [{"field": "…", "message": "…"}]}</pre>
+    <div class="sec">request timing middleware</div>
+    <pre>@app.middleware("http")
+async def timing(request, call_next):
+    t = time.perf_counter()
+    response = await call_next(request)
+    response.headers["X-Time"] = \
+        f"{time.perf_counter()-t:.3f}s"
+    return response</pre>
+    <div class="sec">background task (fire-and-forget)</div>
+    <pre>@app.post("/users")
+async def create(bt: BackgroundTasks):
+    new_user = await user_repo.create(…)
+    bt.add_task(send_welcome_email, new_user)
+    return new_user  # returns immediately</pre>
+  </div>
+</div>
+
+<!-- POSTGRES -->
+<div class="card two">
+  <div class="head"><span class="tag pg">Postgres</span> SQL patterns</div>
+  <div class="body two-col">
+    <div>
+      <div class="sec">window functions</div>
+      <pre>SELECT user_id, amount,
+  SUM(amount) OVER (
+    PARTITION BY user_id
+    ORDER BY created_at
+  ) AS running_total,
+  ROW_NUMBER() OVER (
+    PARTITION BY user_id
+    ORDER BY amount DESC
+  ) AS rank_by_amount
+FROM orders;</pre>
+      <div class="sec">recursive CTE (hierarchies)</div>
+      <pre>WITH RECURSIVE tree AS (
+  SELECT id, name, parent_id, 0 AS depth
+  FROM categories WHERE parent_id IS NULL
+  UNION ALL
+  SELECT c.id, c.name, c.parent_id,
+         t.depth + 1
+  FROM categories c
+  JOIN tree t ON c.parent_id = t.id
+)
+SELECT * FROM tree;</pre>
+    </div>
+    <div>
+      <div class="sec">upsert</div>
+      <pre>INSERT INTO stats(uid, cnt) VALUES ($1, 1)
+ON CONFLICT (uid) DO UPDATE
+  SET cnt = stats.cnt + 1
+RETURNING *;</pre>
+      <div class="sec">LATERAL join (top-N per group)</div>
+      <pre>SELECT u.id, recent.order_id
+FROM users u
+CROSS JOIN LATERAL (
+  SELECT id AS order_id FROM orders
+  WHERE user_id = u.id
+  ORDER BY created_at DESC
+  LIMIT 3
+) recent;</pre>
+      <div class="sec">full text search</div>
+      <pre>WHERE fts @@ plainto_tsquery('english','q')
+ORDER BY ts_rank(fts, query) DESC</pre>
+      <div class="sec">diagnose slow queries</div>
+      <pre>EXPLAIN (ANALYZE, BUFFERS) SELECT …;
+-- Seq Scan on large table → add index</pre>
+    </div>
+  </div>
+</div>
+
+<!-- INDEXES -->
+<div class="card">
+  <div class="head"><span class="tag pg">Postgres</span> Indexing</div>
+  <div class="body">
+    <div class="sec">index types</div>
+    <div class="row"><span class="lbl"><code>B-Tree</code></span><span class="val">default · equality · range · sort</span></div>
+    <div class="row"><span class="lbl"><code>GIN</code></span><span class="val">FTS · JSONB · arrays</span></div>
+    <div class="row"><span class="lbl"><code>BRIN</code></span><span class="val">huge tables with natural order</span></div>
+    <div class="row"><span class="lbl"><code>Hash</code></span><span class="val">equality only</span></div>
+    <div class="sec">partial index (smaller + faster)</div>
+    <pre>-- Index only rows matching condition
+CREATE INDEX ON users(email)
+  WHERE is_active = true;
+
+CREATE INDEX ON orders(created_at)
+  WHERE status = 'pending';</pre>
+    <div class="sec">composite column order</div>
+    <pre>-- (user_id, status) serves:
+-- WHERE user_id=? AND status=?  ✓
+-- WHERE user_id=?               ✓
+-- WHERE status=?                ✗ (no leftmost)</pre>
+    <div class="row"><span class="lbl">when NOT to index</span><span class="val">tiny tables, low-selectivity (bool), high-write</span></div>
+  </div>
+</div>
+
+<!-- REDIS -->
+<div class="card">
+  <div class="head"><span class="tag rd">Redis</span> Patterns</div>
+  <div class="body">
+    <div class="sec">data structure → use case</div>
+    <div class="row"><span class="lbl"><code>String</code></span><span class="val">cache, counter, session token</span></div>
+    <div class="row"><span class="lbl"><code>Hash</code></span><span class="val">object with multiple fields</span></div>
+    <div class="row"><span class="lbl"><code>List</code></span><span class="val">message queue, recent items</span></div>
+    <div class="row"><span class="lbl"><code>Set</code></span><span class="val">unique visitors, tags</span></div>
+    <div class="row"><span class="lbl"><code>Sorted Set</code></span><span class="val">leaderboard, rate limiting</span></div>
+    <div class="row"><span class="lbl"><code>Pub/Sub</code></span><span class="val">real-time events, chat</span></div>
+    <div class="sec">cache-aside pattern</div>
+    <pre>GET cache:key
+  hit  → return parsed value
+  miss → query DB
+       → SET EX 300 key value
+       → return value</pre>
+    <div class="sec">sliding window rate limit</div>
+    <pre>ZREMRANGEBYSCORE key 0 (now - window)
+ZADD key now now
+ZCARD key   → if > limit: reject (429)
+EXPIRE key window</pre>
+    <div class="sec">cache stampede (mutex lock)</div>
+    <pre>SET lock:key 1 NX EX 5  → acquired?
+  yes → fetch DB, set cache, del lock
+  no  → wait 100ms, retry</pre>
+  </div>
+</div>
+
+<!-- HTTP -->
+<div class="card">
+  <div class="head"><span class="tag gr">HTTP</span> Status codes</div>
+  <div class="body">
+    <div class="row"><span class="lbl"><strong style="color:var(--success)">200</strong> OK</span><span class="val">GET / PUT / PATCH success</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--success)">201</strong> Created</span><span class="val">POST success</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--success)">204</strong> No Content</span><span class="val">DELETE success</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--accent)">301/302</strong> Redirect</span><span class="val">permanent / temporary</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">400</strong> Bad Request</span><span class="val">malformed input</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">401</strong> Unauthorized</span><span class="val">not authenticated</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">403</strong> Forbidden</span><span class="val">authenticated, no permission</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">404</strong> Not Found</span><span class="val">resource doesn't exist</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">409</strong> Conflict</span><span class="val">duplicate resource</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">422</strong> Unprocessable</span><span class="val">validation error</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--warn)">429</strong> Too Many</span><span class="val">rate limited</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--danger)">500</strong> Server Error</span><span class="val">unexpected failure</span></div>
+    <div class="row"><span class="lbl"><strong style="color:var(--danger)">503</strong> Unavailable</span><span class="val">down / overloaded</span></div>
+  </div>
+</div>
+
+<!-- SECURITY -->
+<div class="card">
+  <div class="head"><span class="tag gr">Security</span> Checklist</div>
+  <div class="body">
+    <div class="row"><span class="lbl">SQL injection</span><span class="val">parameterised queries — always</span></div>
+    <div class="row"><span class="lbl">XSS</span><span class="val">sanitise HTML input (bleach)</span></div>
+    <div class="row"><span class="lbl">CSRF</span><span class="val">SameSite cookie + CSRF token</span></div>
+    <div class="row"><span class="lbl">Passwords</span><span class="val">bcrypt hash, never store plain</span></div>
+    <div class="row"><span class="lbl">CORS</span><span class="val">whitelist origins, never *</span></div>
+    <div class="row"><span class="lbl">Rate limit</span><span class="val">auth endpoints — 5/min per IP</span></div>
+    <div class="row"><span class="lbl">Secrets</span><span class="val">env vars, never in git</span></div>
+    <div class="row"><span class="lbl">HTTPS</span><span class="val">enforce via HSTS header</span></div>
+    <div class="sec">security headers</div>
+    <pre>X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=31536000
+Content-Security-Policy: default-src 'self'</pre>
+  </div>
+</div>
+
+<!-- SYSTEM DESIGN -->
+<div class="card">
+  <div class="head"><span class="tag gr">Arch</span> System design template</div>
+  <div class="body">
+    <div class="sec">answer structure (5 steps)</div>
+    <div class="row"><span class="lbl">1. Clarify</span><span class="val">scale, features, SLAs</span></div>
+    <div class="row"><span class="lbl">2. Estimate</span><span class="val">DAU × ops/day → RPS + storage</span></div>
+    <div class="row"><span class="lbl">3. High-level</span><span class="val">Client → LB → API → Cache → DB</span></div>
+    <div class="row"><span class="lbl">4. Deep dive</span><span class="val">schema, indexes, caching, queues</span></div>
+    <div class="row"><span class="lbl">5. Trade-offs</span><span class="val">SPOF, CAP choice, 10× scale plan</span></div>
+    <div class="sec">CAP theorem</div>
+    <div class="row"><span class="lbl">CP (banking)</span><span class="val">consistency over availability</span></div>
+    <div class="row"><span class="lbl">AP (social)</span><span class="val">availability over consistency</span></div>
+    <div class="sec">scaling patterns</div>
+    <div class="row"><span class="lbl">read heavy</span><span class="val">read replicas + Redis cache</span></div>
+    <div class="row"><span class="lbl">write heavy</span><span class="val">sharding + message queue</span></div>
+    <div class="row"><span class="lbl">global traffic</span><span class="val">CDN + multi-region deployment</span></div>
+  </div>
+</div>
+
+<!-- PERF -->
+<div class="card full">
+  <div class="head"><span class="tag gr">Debug</span> Performance troubleshooting order</div>
+  <div class="body five-col">
+    <div>
+      <div class="sec">1. measure first</div>
+      <pre>APM / Profiler
+Lighthouse audit
+React DevTools
+pg_stat_statements</pre>
+    </div>
+    <div>
+      <div class="sec">2. database</div>
+      <pre>EXPLAIN ANALYZE
+N+1 → eager load
+Missing index?
+Seq Scan on big table?</pre>
+    </div>
+    <div>
+      <div class="sec">3. cache</div>
+      <pre>Redis hit rate
+redis INFO stats
+TTL too short?
+Stampede issue?</pre>
+    </div>
+    <div>
+      <div class="sec">4. backend</div>
+      <pre>Sequential → parallel
+Pool saturation?
+sync fn in async path?
+Background tasks?</pre>
+    </div>
+    <div>
+      <div class="sec">5. frontend</div>
+      <pre>React Profiler
+Virtualise long lists
+Bundle size audit
+Core Web Vitals (LCP,CLS,FID)</pre>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
